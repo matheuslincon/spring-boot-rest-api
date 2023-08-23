@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.data.vo.v1.PersonVO;
 import com.example.demo.services.PersonServices;
+import com.example.demo.util.MediaType;
 
 @RestController
 @RequestMapping("/api/person/v1")
@@ -23,30 +24,34 @@ public class PersonController {
 	@Autowired
 	private PersonServices service;
 	
-	@GetMapping
+	@GetMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
 	public List<PersonVO> findAll() {
 		return service.findAll();
 	}
-		
-	@GetMapping("/{id}")
-	public PersonVO findById(@PathVariable Long id) throws Exception {
+	
+	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
+	public PersonVO findById(@PathVariable(value = "id") Long id) {
 		return service.findById(id);
 	}
 	
-	@PostMapping
-	public PersonVO create(@RequestBody PersonVO person) throws Exception {
+	@PostMapping(
+		consumes = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML },
+		produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
+	public PersonVO create(@RequestBody PersonVO person) {
 		return service.create(person);
 	}
 	
-	@PatchMapping
-	public PersonVO update(@RequestBody PersonVO person) throws Exception {
+	@PatchMapping(
+		consumes = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML },
+		produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
+	public PersonVO update(@RequestBody PersonVO person) {
 		return service.update(person);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable Long id) throws Exception {
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-
 }
